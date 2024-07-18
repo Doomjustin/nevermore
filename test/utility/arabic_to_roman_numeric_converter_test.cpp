@@ -1,46 +1,11 @@
-#include <Catch2/catch_test_macros.hpp>
+#include "catch2/catch_test_macros.hpp"
+#include "nevermore/Converter.h"
 
-#include <string>
-#include <array>
-
-struct ArabicToRomanMapping{
-    unsigned arabic_number;
-    std::string roman_numeral;
-};
-
-std::string convert_arabic_to_roman_numeral(unsigned arabic_number)
-{
-    static std::array<ArabicToRomanMapping, 13> arabic_to_roman_mappings =
-                {
-                    ArabicToRomanMapping{ 1000, "M" },
-                    { 900, "CM" },
-                    { 500, "D" },
-                    { 400, "CD" },
-                    { 100, "C" },
-                    { 90, "XC" },
-                    { 50, "L" },
-                    { 40, "XL" },
-                    { 10, "X" },
-                    { 9, "IX" },
-                    { 5, "V" },
-                    { 4, "IV" },
-                    { 1, "I" }
-                };
-
-    std::string roman_numeral{};
-
-    for (const auto& [arabic_number_unit, roman_numeral_digit]: arabic_to_roman_mappings) {
-        while (arabic_number >= arabic_number_unit) {
-            roman_numeral += roman_numeral_digit;
-            arabic_number -= arabic_number_unit;
-        }
-    }
-
-    return roman_numeral;
-}
 
 TEST_CASE("Arabic to Roman numerics converter test", "[converter]")
 {
+    using namespace sf;
+
     REQUIRE(convert_arabic_to_roman_numeral(1) == "I");
     REQUIRE(convert_arabic_to_roman_numeral(2) == "II");
     REQUIRE(convert_arabic_to_roman_numeral(3) == "III");
