@@ -4,9 +4,14 @@
 
 std::string convert_arabic_to_roman_numeral(int number)
 {
-    if (number == 2)
-        return "II";
-    return "I";
+    std::string roman_numeral{};
+
+    while (number >= 1) {
+        roman_numeral += "I";
+        number -= 1;
+    }
+
+    return roman_numeral;
 }
 
 TEST_CASE("Arabic to Roman numerics converter test", "[converter]")
@@ -19,5 +24,10 @@ TEST_CASE("Arabic to Roman numerics converter test", "[converter]")
     SECTION("2 -> II")
     {
         REQUIRE(convert_arabic_to_roman_numeral(2) == "II");
+    }
+
+    SECTION("3 -> III")
+    {
+        REQUIRE(convert_arabic_to_roman_numeral(3) == "III");
     }
 }
