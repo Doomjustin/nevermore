@@ -12,7 +12,7 @@ std::string convert_arabic_to_roman_numeral(unsigned arabic_number)
 {
     static std::array<ArabicToRomanMapping, 13> arabic_to_roman_mappings = {
         ArabicToRomanMapping{ 1000, "M" },
-        ArabicToRomanMapping{ 900, "CM" },
+        { 900, "CM" },
         { 500, "D" },
         { 400, "CD" },
         { 100, "C" },
