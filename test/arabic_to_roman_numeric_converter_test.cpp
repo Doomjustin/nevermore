@@ -10,9 +10,11 @@ struct ArabicToRomanMapping{
 
 std::string convert_arabic_to_roman_numeral(unsigned arabic_number)
 {
-    static std::array<ArabicToRomanMapping, 5> arabic_to_roman_mappings = {
+    static std::array<ArabicToRomanMapping, 7> arabic_to_roman_mappings = {
         ArabicToRomanMapping{ 1000, "M" },
+        { 500, "D" },
         { 100, "C" },
+        { 50, "L" },
         { 10, "X" },
         { 5, "V" },
         { 1, "I" }
@@ -46,10 +48,13 @@ TEST_CASE("Arabic to Roman numerics converter test", "[converter]")
     REQUIRE(convert_arabic_to_roman_numeral(30) == "XXX");
     REQUIRE(convert_arabic_to_roman_numeral(33) == "XXXIII");
 
+    REQUIRE(convert_arabic_to_roman_numeral(50) == "L");
+
     REQUIRE(convert_arabic_to_roman_numeral(100) == "C");
     REQUIRE(convert_arabic_to_roman_numeral(200) == "CC");
     REQUIRE(convert_arabic_to_roman_numeral(300) == "CCC");
     REQUIRE(convert_arabic_to_roman_numeral(333) == "CCCXXXIII");
+    REQUIRE(convert_arabic_to_roman_numeral(500) == "D");
 
     REQUIRE(convert_arabic_to_roman_numeral(1000) == "M");
     REQUIRE(convert_arabic_to_roman_numeral(2000) == "MM");
