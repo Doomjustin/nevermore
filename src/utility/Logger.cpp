@@ -8,68 +8,46 @@ Logger::Logger(std::string name)
 
 void Logger::fatal(std::string message, std::source_location location)
 {
-    LogEntry entry {
-        .level = LogLevel::Fatal,
-        .logger_name = name_,
-        .location = location,
-        .message = std::move(message)
-    };
-
-    write(std::move(entry));
+    write(std::move(message), LogLevel::Fatal, location);
 }
 
 void Logger::error(std::string message, std::source_location location)
 {
-    LogEntry entry {
-        .level = LogLevel::Error,
-        .logger_name = name_,
-        .location = location,
-        .message = std::move(message)
-    };
-
-    write(std::move(entry));
+    write(std::move(message), LogLevel::Error, location);
 }
 
 void Logger::warning(std::string message, std::source_location location)
 {
-    LogEntry entry {
-        .level = LogLevel::Warning,
-        .logger_name = name_,
-        .location = location,
-        .message = std::move(message)
-    };
-
-    write(std::move(entry));
+    write(std::move(message), LogLevel::Warning, location);
 }
 
 void Logger::info(std::string message, std::source_location location)
 {
-    LogEntry entry {
-        .level = LogLevel::Info,
-        .logger_name = name_,
-        .location = location,
-        .message = std::move(message)
-    };
-
-    write(std::move(entry));
+    write(std::move(message), LogLevel::Info, location);
 }
 
 void Logger::debug(std::string message, std::source_location location)
 {
-    LogEntry entry {
-        .level = LogLevel::Debug,
-        .logger_name = name_,
-        .location = location,
-        .message = std::move(message)
-    };
-
-    write(std::move(entry));
+    write(std::move(message), LogLevel::Debug, location);
 }
 
 void Logger::trace(std::string message, std::source_location location)
 {
+    write(std::move(message), LogLevel::Trace, location);
+}
+
+void Logger::level(LogLevel new_level) noexcept
+{
+    level_ = new_level;
+}
+
+void Logger::write(std::string message, LogLevel level, std::source_location location)
+{
+    if (level > level_)
+        return;
+
     LogEntry entry {
-        .level = LogLevel::Trace,
+        .level = level,
         .logger_name = name_,
         .location = location,
         .message = std::move(message)

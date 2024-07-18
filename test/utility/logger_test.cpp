@@ -24,8 +24,90 @@ TEST_CASE("stdout logger test", "[logger]")
 
     SECTION("output as format: [level] occurred_time: message")
     {
-        logger->error("this is a info message");
+        logger->error("error message");
         REQUIRE_THAT(buffer.str(), ContainsSubstring("[error]"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("this is a info message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("error message"));
+    }
+
+    SECTION("when logger's LogLevel is Off, won't log anything")
+    {
+        logger->level(sf::LogLevel::Off);
+
+        logger->fatal("fatal message");
+        logger->error("error message");
+        logger->warning("warning message");
+        logger->info("info message");
+        logger->debug("debug message");
+        logger->trace("trace message");
+
+        REQUIRE(buffer.str().empty());
+    }
+
+    SECTION("when logger's LogLevel is Fatal, won't log message if level < Fatal")
+    {
+        logger->level(sf::LogLevel::Fatal);
+
+        logger->fatal("fatal message");
+        logger->error("error message");
+        logger->warning("warning message");
+        logger->info("info message");
+        logger->debug("debug message");
+        logger->trace("trace message");
+
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[fatal]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("fatal message"));
+
+        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[error]"));
+        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[warning]"));
+        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[info]"));
+        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[debug]"));
+        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[trace]"));
+    }
+
+    SECTION("when logger's LogLevel is Error, won't log message if level < Error")
+    {
+        logger->level(sf::LogLevel::Error);
+
+        logger->fatal("fatal message");
+        logger->error("error message");
+        logger->warning("warning message");
+        logger->info("info message");
+        logger->debug("debug message");
+        logger->trace("trace message");
+
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[fatal]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("fatal message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[error]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("error message"));
+
+        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[warning]"));
+        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[info]"));
+        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[debug]"));
+        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[trace]"));
+    }
+
+    SECTION("when logger's LogLevel is Trace, log all level's message")
+    {
+        logger->level(sf::LogLevel::Trace);
+
+        logger->fatal("fatal message");
+        logger->error("error message");
+        logger->warning("warning message");
+        logger->info("info message");
+        logger->debug("debug message");
+        logger->trace("trace message");
+
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[fatal]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("fatal message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[error]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("error message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[warning]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("warning message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[info]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("info message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[debug]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("debug message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[trace]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("trace message"));
     }
 }

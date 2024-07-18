@@ -13,6 +13,7 @@
 namespace sf {
 
 enum class LogLevel: std::uint8_t {
+    Off,
     Fatal,
     Error,
     Warning,
@@ -51,10 +52,18 @@ public:
 
     void trace(std::string message, std::source_location location = std::source_location::current());
 
+    void level(LogLevel new_level) noexcept;
+
+    constexpr LogLevel level() const noexcept { return level_; }
+
 protected:
     std::string name_ = "NevermoreLogger";
+    LogLevel level_ = LogLevel::Debug;
 
     virtual void write(LogEntry entry) = 0;
+
+private:
+    void write(std::string message, LogLevel level, std::source_location location);
 };
 
 
