@@ -1,6 +1,9 @@
 add_library(nevermore_utility STATIC
     include/nevermore/Converter.h
     arabic_to_roman_numeric.cpp
+    include/nevermore/Logger.h
+    Logger.cpp
+    include/nevermore/Noncopyable.h
 )
 
 add_library(nevermore::utility ALIAS nevermore_utility)
