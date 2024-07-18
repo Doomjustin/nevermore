@@ -41,6 +41,11 @@ void Logger::level(LogLevel new_level) noexcept
     level_ = new_level;
 }
 
+void Logger::add_appender(std::shared_ptr<LogAppender> appender)
+{
+    appenders_.push_back(std::move(appender));
+}
+
 void Logger::write(std::string message, LogLevel level, std::source_location location)
 {
     if (level > global_log_level() || level > level_)
@@ -53,8 +58,21 @@ void Logger::write(std::string message, LogLevel level, std::source_location loc
         .message = std::move(message)
     };
 
-    write(std::move(entry));
+    write(entry);
 }
+
+void Logger::write(const LogEntry& entry)
+{
+    auto formatted_message = formatter_.format(entry);
+    for (auto& appender: appenders_)
+        appender->write(formatted_message);
+}
+
+void Logger::pattern(std::string new_pattern) noexcept
+{
+    formatter_.pattern(std::move(new_pattern));
+}
+
 
 static LogLevel global_log_level_ = LogLevel::Trace;
 
