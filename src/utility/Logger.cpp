@@ -43,7 +43,7 @@ void Logger::level(LogLevel new_level) noexcept
 
 void Logger::write(std::string message, LogLevel level, std::source_location location)
 {
-    if (level > level_)
+    if (level > global_log_level() || level > level_)
         return;
 
     LogEntry entry {
@@ -54,6 +54,18 @@ void Logger::write(std::string message, LogLevel level, std::source_location loc
     };
 
     write(std::move(entry));
+}
+
+static LogLevel global_log_level_ = LogLevel::Trace;
+
+void global_log_level(LogLevel new_level)
+{
+    global_log_level_ = new_level;
+}
+
+LogLevel global_log_level() noexcept
+{
+    return global_log_level_;
 }
 
 } // namespace sf

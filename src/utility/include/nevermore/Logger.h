@@ -57,14 +57,18 @@ public:
     constexpr LogLevel level() const noexcept { return level_; }
 
 protected:
-    std::string name_ = "NevermoreLogger";
-    LogLevel level_ = LogLevel::Debug;
-
     virtual void write(LogEntry entry) = 0;
 
 private:
+    std::string name_ = "NevermoreLogger";
+    LogLevel level_ = LogLevel::Debug;
+
     void write(std::string message, LogLevel level, std::source_location location);
 };
+
+void global_log_level(LogLevel new_level);
+
+LogLevel global_log_level() noexcept;
 
 
 class StdoutLogger: public Logger {

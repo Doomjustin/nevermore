@@ -27,6 +27,8 @@ std::ostream& operator<<(std::ostream& os, LogLevel level)
     case Trace:
         os << "trace";
         break;
+    default:
+        break;
     }
 
     return os;

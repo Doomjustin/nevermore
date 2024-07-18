@@ -110,4 +110,44 @@ TEST_CASE("stdout logger test", "[logger]")
         REQUIRE_THAT(buffer.str(), ContainsSubstring("[trace]"));
         REQUIRE_THAT(buffer.str(), ContainsSubstring("trace message"));
     }
+
+    SECTION("when global LogLevel is Off, won't log anything")
+    {
+        sf::global_log_level(sf::LogLevel::Off);
+        logger->level(sf::LogLevel::Trace);
+
+        logger->fatal("fatal message");
+        logger->error("error message");
+        logger->warning("warning message");
+        logger->info("info message");
+        logger->debug("debug message");
+        logger->trace("trace message");
+
+        REQUIRE(buffer.str().empty());
+    }
+
+    SECTION("when global LogLevel is Debug, won't log message if level < Debug")
+    {
+        sf::global_log_level(sf::LogLevel::Debug);
+        logger->level(sf::LogLevel::Trace);
+
+        logger->fatal("fatal message");
+        logger->error("error message");
+        logger->warning("warning message");
+        logger->info("info message");
+        logger->debug("debug message");
+        logger->trace("trace message");
+
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[fatal]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("fatal message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[error]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("error message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[warning]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("warning message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[info]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("info message"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("[debug]"));
+        REQUIRE_THAT(buffer.str(), ContainsSubstring("debug message"));
+        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[trace]"));
+    }
 }
