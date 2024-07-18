@@ -4,6 +4,7 @@ add_library(nevermore_utility STATIC
     include/nevermore/Logger.h
     Logger.cpp
     include/nevermore/Noncopyable.h
+    StdoutLogger.cpp
 )
 
 add_library(nevermore::utility ALIAS nevermore_utility)

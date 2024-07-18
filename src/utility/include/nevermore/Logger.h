@@ -57,6 +57,16 @@ protected:
     virtual void write(LogEntry entry) = 0;
 };
 
+
+class StdoutLogger: public Logger {
+public:
+    explicit StdoutLogger(std::string name);
+
+    ~StdoutLogger() override = default;
+
+    void write(LogEntry entry) override;
+};
+
 } // namespace sf
 
 #endif // NEVERMORE_UTILITY_LOGGER_H
