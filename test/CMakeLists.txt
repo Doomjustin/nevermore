@@ -8,4 +8,4 @@ macro(add_catch2_test target)
 endmacro()
 
 add_subdirectory(utility)
-
+add_subdirectory(log)

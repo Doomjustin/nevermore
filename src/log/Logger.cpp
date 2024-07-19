@@ -73,17 +73,4 @@ void Logger::pattern(std::string new_pattern) noexcept
     formatter_.pattern(std::move(new_pattern));
 }
 
-
-static LogLevel global_log_level_ = LogLevel::Trace;
-
-void global_log_level(LogLevel new_level)
-{
-    global_log_level_ = new_level;
-}
-
-LogLevel global_log_level() noexcept
-{
-    return global_log_level_;
-}
-
 } // namespace sf

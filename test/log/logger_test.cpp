@@ -1,7 +1,8 @@
-#include <Catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_string.hpp>
+#include "catch2/catch_test_macros.hpp"
+#include "catch2/matchers/catch_matchers_string.hpp"
 
 #include "nevermore/Logger.h"
+#include "nevermore/StdoutAppender.h"
 
 #include <sstream>
 #include <iostream>
@@ -96,7 +97,7 @@ TEST_CASE("stdout logger test", "[logger]")
 
     sf::Logger logger{ "test logger" };
 
-    auto stdout_log_appender = std::make_shared<sf::StdoutLogAppender>();
+    auto stdout_log_appender = std::make_shared<sf::StdoutAppender>();
     logger.add_appender(std::move(stdout_log_appender));
 
     using Catch::Matchers::ContainsSubstring;

@@ -9,6 +9,3 @@ endmacro()
 
 add_executable(arabic_to_roman_numeric_converter_test arabic_to_roman_numeric_converter_test.cpp)
 add_utility_test(arabic_to_roman_numeric_converter_test)
-
-add_executable(logger_test logger_test.cpp)
-add_utility_test(logger_test)

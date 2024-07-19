@@ -1,6 +1,7 @@
-#include "nevermore/Logger.h"
+#include "nevermore/LogFormatter.h"
 
 #include <utility>
+#include <ostream>
 
 namespace sf {
 
