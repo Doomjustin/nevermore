@@ -3,59 +3,49 @@
 
 #include "nevermore/Noncopyable.h"
 #include "nevermore/LogLevel.h"
-#include "nevermore/LogEntry.h"
-#include "nevermore/LogAppender.h"
-#include "nevermore/LogFormatter.h"
 
 #include <string>
 #include <source_location>
-#include <memory>
-#include <vector>
+#include <format>
 
 namespace sf {
 
-void global_log_level(LogLevel new_level);
-
-LogLevel global_log_level() noexcept;
-
-
 class Logger: public Noncopyable {
 public:
-    explicit Logger(std::string name);
-
     ~Logger() override = default;
 
-    void fatal(std::string message, std::source_location location = std::source_location::current());
+    virtual void error(std::string message, std::source_location location) = 0;
 
-    void error(std::string message, std::source_location location = std::source_location::current());
+    virtual void warning(std::string message, std::source_location location) = 0;
 
-    void warning(std::string message, std::source_location location = std::source_location::current());
+    virtual void info(std::string message, std::source_location location) = 0;
 
-    void info(std::string message, std::source_location location = std::source_location::current());
+    virtual void debug(std::string message, std::source_location location) = 0;
 
-    void debug(std::string message, std::source_location location = std::source_location::current());
+    virtual void trace(std::string message, std::source_location location) = 0;
 
-    void trace(std::string message, std::source_location location = std::source_location::current());
+    virtual void level(LogLevel new_level) noexcept = 0;
 
-    void level(LogLevel new_level) noexcept;
+    virtual LogLevel level() const noexcept = 0;
 
-    constexpr LogLevel level() const noexcept { return level_; }
-
-    void add_appender(std::shared_ptr<LogAppender> appender);
-
-    void pattern(std::string new_pattern) noexcept;
-
-private:
-    std::string name_ = "NevermoreLogger";
-    LogLevel level_ = LogLevel::Debug;
-    LogFormatter formatter_ = LogFormatter{ "[%L] %t: %m" };
-    std::vector<std::shared_ptr<LogAppender>> appenders_;
-
-    void write(std::string message, LogLevel level, std::source_location location);
-
-    void write(const LogEntry& entry);
+    virtual void pattern(std::string new_pattern) noexcept = 0;
 };
 
 } // namespace sf
+
+#ifndef NDEBUG
+#include <spdlog/spdlog.h>
+    #define SF_ERROR SPDLOG_ERROR
+    #define SF_WARN SPDLOG_wARN
+    #define SF_DEBUG SPDLOG_DEBUG
+    #define SF_INFO SPDLOG_INFO
+    #define SF_TRACE SPDLOG_TRACE
+#else
+    #define SF_ERROR(...)
+    #define SF_WARN(...)
+    #define SF_DEBUG(...)
+    #define SF_INFO(...)
+    #define SF_TRACE(...)
+#endif
 
 #endif // NEVERMORE_LOGGER_H

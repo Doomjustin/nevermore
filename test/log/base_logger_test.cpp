@@ -1,7 +1,7 @@
 #include "catch2/catch_test_macros.hpp"
 #include "catch2/matchers/catch_matchers_string.hpp"
 
-#include "nevermore/Logger.h"
+#include "nevermore/BaseLogger.h"
 #include "nevermore/StdoutAppender.h"
 
 #include <sstream>
@@ -95,7 +95,7 @@ TEST_CASE("stdout logger test", "[logger]")
     std::stringstream buffer{};
     std::cout.rdbuf(buffer.rdbuf());
 
-    sf::Logger logger{ "test logger" };
+    sf::BaseLogger logger{ "test logger" };
 
     auto stdout_log_appender = std::make_shared<sf::StdoutAppender>();
     logger.add_appender(std::move(stdout_log_appender));
@@ -112,7 +112,7 @@ TEST_CASE("stdout logger test", "[logger]")
 
     SECTION("output as format: [level] occurred_time: message")
     {
-        logger.error("error message");
+        logger.error("error message", std::source_location::current());
         REQUIRE_THAT(buffer.str(), ContainsSubstring("[error]"));
         REQUIRE_THAT(buffer.str(), ContainsSubstring("error message"));
     }
@@ -121,50 +121,25 @@ TEST_CASE("stdout logger test", "[logger]")
     {
         logger.level(sf::LogLevel::Off);
 
-        logger.fatal("fatal message");
-        logger.error("error message");
-        logger.warning("warning message");
-        logger.info("info message");
-        logger.debug("debug message");
-        logger.trace("trace message");
+        logger.error("error message", std::source_location::current());
+        logger.warning("warning message", std::source_location::current());
+        logger.info("info message", std::source_location::current());
+        logger.debug("debug message", std::source_location::current());
+        logger.trace("trace message", std::source_location::current());
 
         REQUIRE(buffer.str().empty());
-    }
-
-    SECTION("when logger's LogLevel is Fatal, won't log message if level < Fatal")
-    {
-        logger.level(sf::LogLevel::Fatal);
-
-        logger.fatal("fatal message");
-        logger.error("error message");
-        logger.warning("warning message");
-        logger.info("info message");
-        logger.debug("debug message");
-        logger.trace("trace message");
-
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("[fatal]"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("fatal message"));
-
-        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[error]"));
-        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[warning]"));
-        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[info]"));
-        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[debug]"));
-        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[trace]"));
     }
 
     SECTION("when logger's LogLevel is Error, won't log message if level < Error")
     {
         logger.level(sf::LogLevel::Error);
 
-        logger.fatal("fatal message");
-        logger.error("error message");
-        logger.warning("warning message");
-        logger.info("info message");
-        logger.debug("debug message");
-        logger.trace("trace message");
+        logger.error("error message", std::source_location::current());
+        logger.warning("warning message", std::source_location::current());
+        logger.info("info message", std::source_location::current());
+        logger.debug("debug message", std::source_location::current());
+        logger.trace("trace message", std::source_location::current());
 
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("[fatal]"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("fatal message"));
         REQUIRE_THAT(buffer.str(), ContainsSubstring("[error]"));
         REQUIRE_THAT(buffer.str(), ContainsSubstring("error message"));
 
@@ -178,15 +153,12 @@ TEST_CASE("stdout logger test", "[logger]")
     {
         logger.level(sf::LogLevel::Trace);
 
-        logger.fatal("fatal message");
-        logger.error("error message");
-        logger.warning("warning message");
-        logger.info("info message");
-        logger.debug("debug message");
-        logger.trace("trace message");
+        logger.error("error message", std::source_location::current());
+        logger.warning("warning message", std::source_location::current());
+        logger.info("info message", std::source_location::current());
+        logger.debug("debug message", std::source_location::current());
+        logger.trace("trace message", std::source_location::current());
 
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("[fatal]"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("fatal message"));
         REQUIRE_THAT(buffer.str(), ContainsSubstring("[error]"));
         REQUIRE_THAT(buffer.str(), ContainsSubstring("error message"));
         REQUIRE_THAT(buffer.str(), ContainsSubstring("[warning]"));
@@ -197,45 +169,5 @@ TEST_CASE("stdout logger test", "[logger]")
         REQUIRE_THAT(buffer.str(), ContainsSubstring("debug message"));
         REQUIRE_THAT(buffer.str(), ContainsSubstring("[trace]"));
         REQUIRE_THAT(buffer.str(), ContainsSubstring("trace message"));
-    }
-
-    SECTION("when global LogLevel is Off, won't log anything")
-    {
-        sf::global_log_level(sf::LogLevel::Off);
-        logger.level(sf::LogLevel::Trace);
-
-        logger.fatal("fatal message");
-        logger.error("error message");
-        logger.warning("warning message");
-        logger.info("info message");
-        logger.debug("debug message");
-        logger.trace("trace message");
-
-        REQUIRE(buffer.str().empty());
-    }
-
-    SECTION("when global LogLevel is Debug, won't log message if level < Debug")
-    {
-        sf::global_log_level(sf::LogLevel::Debug);
-        logger.level(sf::LogLevel::Trace);
-
-        logger.fatal("fatal message");
-        logger.error("error message");
-        logger.warning("warning message");
-        logger.info("info message");
-        logger.debug("debug message");
-        logger.trace("trace message");
-
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("[fatal]"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("fatal message"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("[error]"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("error message"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("[warning]"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("warning message"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("[info]"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("info message"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("[debug]"));
-        REQUIRE_THAT(buffer.str(), ContainsSubstring("debug message"));
-        REQUIRE_THAT(buffer.str(), !ContainsSubstring("[trace]"));
     }
 }

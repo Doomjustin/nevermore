@@ -11,6 +11,7 @@ namespace sf {
 
 class LogFormatter {
 public:
+    LogFormatter() = default;
     explicit LogFormatter(std::string pattern);
 
     std::string format(const LogEntry& entry);
@@ -26,7 +27,7 @@ private:
     };
 
     // members
-    std::string pattern_;
+    std::string pattern_ = "[%L] %t: %m";
     std::unordered_map<char, std::unique_ptr<Item>> items_;
 
     // Items

@@ -8,10 +8,7 @@ namespace sf {
 std::ostream& operator<<(std::ostream& os, LogLevel level)
 {
     switch (level) {
-        using enum LogLevel;
-    case Fatal:
-        os << "fatal";
-        break;
+    using enum LogLevel;
     case Error:
         os << "error";
         break;

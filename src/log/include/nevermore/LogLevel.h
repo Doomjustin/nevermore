@@ -7,7 +7,6 @@ namespace sf {
 
 enum class LogLevel: std::uint8_t {
     Off,
-    Fatal,
     Error,
     Warning,
     Info,

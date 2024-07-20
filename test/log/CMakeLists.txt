@@ -1,8 +1,14 @@
-add_executable(logger_test logger_test.cpp)
+macro(add_log_test target)
+    target_link_libraries(${target} PRIVATE
+        Catch2::Catch2WithMain
+        nevermore::log
+    )
 
-target_link_libraries(logger_test PRIVATE
-    Catch2::Catch2WithMain
-    nevermore::log
-)
+    catch_discover_tests(${target})
+endmacro()
 
-catch_discover_tests(logger_test)
+add_executable(base_logger_test base_logger_test.cpp)
+add_log_test(base_logger_test)
+
+add_executable(log_test log_test.cpp)
+add_log_test(log_test)
