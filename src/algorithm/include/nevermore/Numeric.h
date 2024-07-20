@@ -9,12 +9,24 @@ template<typename Integral>
     requires std::is_integral_v<Integral>
 consteval Integral factorial(Integral n)
 {
-    int res = 1;
+    Integral res = 1;
     while (n >= 1)
         res *= n--;
 
     return res;
 }
+
+
+namespace recursive {
+
+template<typename Integral>
+    requires std::is_integral_v<Integral>
+consteval Integral factorial(Integral n)
+{
+    return n <= 1 ? 1 : n * factorial(n - 1);
+}
+
+} // namespace sf::recursive
 
 } // namespace sf
 
