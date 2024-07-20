@@ -26,6 +26,13 @@ consteval Integral factorial(Integral n)
     return n <= 1 ? 1 : n * factorial(n - 1);
 }
 
+template<typename Integral>
+    requires std::is_integral_v<Integral>
+consteval Integral fibonacci(Integral n)
+{
+    return n <= 1 ? n : fibonacci(n - 1) + fibonacci(n - 2);
+}
+
 } // namespace sf::recursive
 
 } // namespace sf
