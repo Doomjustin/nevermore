@@ -67,3 +67,11 @@ TEMPLATE_LIST_TEST_CASE("test fibonacci", "[numeric]", IntegralTypes)
         REQUIRE(sf::fibonacci<TestType>(12) == 144);
     }
 }
+
+TEMPLATE_LIST_TEST_CASE("test gcd", "[numeric]", IntegralTypes)
+{
+    REQUIRE(sf::recursive::gcd(0, 0) == 0);
+    REQUIRE(sf::recursive::gcd(10, 0) == 10);
+    REQUIRE(sf::recursive::gcd(0, 10) == 10);
+    REQUIRE(sf::recursive::gcd(20, 30) == 10);
+}

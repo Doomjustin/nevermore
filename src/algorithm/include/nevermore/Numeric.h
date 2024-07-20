@@ -51,6 +51,14 @@ consteval Integral fibonacci(Integral n)
     return n <= 1 ? n : fibonacci(n - 1) + fibonacci(n - 2);
 }
 
+template<typename Integral>
+    requires std::is_integral_v<Integral>
+consteval Integral gcd(Integral x, Integral y)
+{
+    if (y == 0) return x;
+    return gcd(y, x % y);
+}
+
 } // namespace sf::recursive
 
 } // namespace sf
