@@ -16,6 +16,24 @@ consteval Integral factorial(Integral n)
     return res;
 }
 
+template<typename Integral>
+    requires std::is_integral_v<Integral>
+consteval Integral fibonacci(Integral n)
+{
+    if (n <= 1) return n;
+
+    Integral res = 1;
+    Integral last_res = 0;
+
+    while (n > 1) {
+        auto tmp = last_res;
+        last_res = res;
+        res += tmp;
+        --n;
+    }
+
+    return res;
+}
 
 namespace recursive {
 

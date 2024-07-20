@@ -49,4 +49,21 @@ TEMPLATE_LIST_TEST_CASE("test fibonacci", "[numeric]", IntegralTypes)
         REQUIRE(sf::recursive::fibonacci<TestType>(11) == 89);
         REQUIRE(sf::recursive::fibonacci<TestType>(12) == 144);
     }
+
+    SECTION("test non-recursive implementation")
+    {
+        REQUIRE(sf::fibonacci<TestType>(0) == 0);
+        REQUIRE(sf::fibonacci<TestType>(1) == 1);
+        REQUIRE(sf::fibonacci<TestType>(2) == 1);
+        REQUIRE(sf::fibonacci<TestType>(3) == 2);
+        REQUIRE(sf::fibonacci<TestType>(4) == 3);
+        REQUIRE(sf::fibonacci<TestType>(5) == 5);
+        REQUIRE(sf::fibonacci<TestType>(6) == 8);
+        REQUIRE(sf::fibonacci<TestType>(7) == 13);
+        REQUIRE(sf::fibonacci<TestType>(8) == 21);
+        REQUIRE(sf::fibonacci<TestType>(9) == 34);
+        REQUIRE(sf::fibonacci<TestType>(10) == 55);
+        REQUIRE(sf::fibonacci<TestType>(11) == 89);
+        REQUIRE(sf::fibonacci<TestType>(12) == 144);
+    }
 }
